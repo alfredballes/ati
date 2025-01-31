@@ -36,7 +36,7 @@ Template Post Type: courses
                         <div class="single-course__calendar mobile-only">
 							<?php $price_links_data = get_field('purchase_price_and_links');
 							if(get_field('upcoming_courses_button') == 1 || get_field('course_type') == "in-person") { ?>
-								<a href="#upcoming" class="single-course__btn outline mobile-only">View Calendar</a>
+								<a href="#campus-links" class="single-course__btn outline mobile-only">View Calendar</a>
 							<?php } ?>
                             
 							<?php if((!empty($price_links_data) && get_field('show_enrol_button') == 1) && get_field('upcoming_courses_button') == 1) { ?>
@@ -47,7 +47,7 @@ Template Post Type: courses
                                 $html_output = '';
                                 if(!empty($price_links_data) && get_field('show_enrol_button') == 1){
                                     foreach($price_links_data as $pld){
-                                        $html_output .= '<a href="'.$pld['purchase_link'].'" class="single-course__btn">Enrol in Online Course </a>';
+                                        $html_output .= '<a href="'.$pld['purchase_link'].'" class="single-course__btn outline green mobile-only">Start Online Today</a>';
                                     }
                                 }
                                 print $html_output;
@@ -58,9 +58,13 @@ Template Post Type: courses
 						
 						<select class="mb10 form-control mobile-only" id="tab_selector">
 							<option value="#description-box">Overview</option>
-							<option value="#units-box">Units</option>
-							<option value="#pre-requisites-box">Prerequisites</option>
-							<option value="#licensing-box">Licensing</option>
+							<?php if(str_contains(get_the_title($post->ID), "Non-Accredited")) { 
+								// show nothing
+							} else { ?>
+								<option value="#units-box">Units</option>
+								<option value="#pre-requisites-box">Prerequisites</option>
+								<option value="#licensing-box">Licensing</option>
+							<?php } ?>
 							<option value="#duration-box">Duration</option>
 							<option value="#cost-box">Cost</option>
 							<?php if(get_field('show_funding') == 1) { ?>
@@ -73,15 +77,19 @@ Template Post Type: courses
 								<li class="nav-item">
 								    <a class="nav-link et_smooth_scroll_disabled active" data-toggle="tab" href="#description-box">Overview</a>
 								</li>
-                                <li class="nav-item">
-								    <a class="nav-link et_smooth_scroll_disabled" data-toggle="tab" href="#units-box">Units</a>
-								</li>
-								<li class="nav-item">
-								    <a class="nav-link et_smooth_scroll_disabled" data-toggle="tab" href="#pre-requisites-box">Prerequisites</a>
-								</li>
-								<li class="nav-item">
-								    <a class="nav-link et_smooth_scroll_disabled" data-toggle="tab" href="#licensing-box">Licensing</a>
-								</li>
+                                <?php if(str_contains(get_the_title($post->ID), "Non-Accredited")) { 
+									// show nothing
+								} else { ?>
+									<li class="nav-item">
+										<a class="nav-link et_smooth_scroll_disabled" data-toggle="tab" href="#units-box">Units</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link et_smooth_scroll_disabled" data-toggle="tab" href="#pre-requisites-box">Prerequisites</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link et_smooth_scroll_disabled" data-toggle="tab" href="#licensing-box">Licensing</a>
+									</li>
+								<?php } ?>
 								<li class="nav-item">
 								    <a class="nav-link et_smooth_scroll_disabled" data-toggle="tab" href="#duration-box">Duration</a>
 								</li>
@@ -95,7 +103,7 @@ Template Post Type: courses
 								<?php  } ?>
 								<?php if(get_field('course_type') == "in-person") { ?>
 									<li class="nav-item">
-										<a class="enrol-link" href="#upcoming">Calendar <i class="fa-solid fa-angle-right"></i></a>
+										<a class="enrol-link" href="#campus-links">Calendar <i class="fa-solid fa-angle-right"></i></a>
 									</li>
 								<?php } ?>
 								<?php if(get_field('enrol_link') != "") { ?>
@@ -110,12 +118,16 @@ Template Post Type: courses
 							<div class="tab-content" id="single_course-tabs-content">
 								<div id="description-box" class="tab-pane active">
 									<div class="right-img">
+										<?php if(get_field('funding_available') == 1) { ?>
+											<a href="<?php bloginfo('url');?>/funded-training/"><img src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/11/government-funding3.png"></a>
+											<br>
+										<?php } ?>
 										<?php if(get_field('show_same_day_certificate') == 1) { ?>
 											<img src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/07/Same-Day-Certificate-224x300-1.png">
 										<?php } ?>
 										<?php if(get_field('best_price_enable') == 1) { ?>
 											<br>
-											<img class="right-img second" src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/04/best-price.png">
+											<img class="second" src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/06/best-price-e1729749867768.png">
 										<?php } ?>
 									</div>
 									<?php the_content(); ?>
@@ -130,7 +142,16 @@ Template Post Type: courses
 									<?php the_field('licensing'); ?>
 								</div>
 								<div id="cost-box" class=" tab-pane fade">
-								<?php the_field('costs'); ?>
+									<div class="right-img">
+										<img src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/11/Apple-Pay.png">
+										<br>
+										<img src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/11/Google-Pay.png">
+										<br>
+										<img src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/11/mastercard.png">
+										<br>
+										<img src="<?php bloginfo('url'); ?>/wp-content/uploads/2024/11/visa.png">
+									</div>
+									<?php the_field('costs'); ?>
 									<?php if((int)trim(get_field('best_price_enable')) == 1){ ?>
 										<p class="best-price"><small><img style="float: left;" src="<?php print bloginfo('url'); ?>/wp-content/uploads/2024/04/best-price.png" alt="Best Price" width="64" height="53"><span>We guarantee to beat any comparable competitor pricing (conditions apply)<br/>Please contact us if you do happen to find a better price. </span></small></p>
 									<?php } ?>
@@ -152,6 +173,8 @@ Template Post Type: courses
 								<?php } ?>
 							</div>
                         <!-- End of Content Tab panes -->
+						
+						<div id="courses-link"></div>
 
                     </div>
                     <div class="col-lg-4 col-md-12 col-sm-12 col-12 white-bg-sidebar">
@@ -176,14 +199,23 @@ Template Post Type: courses
                                 }
                                 print $html_output;
                             ?>
+							<?php if($term_obj_list[0]->name == "Justice Services") { ?>
+								<div class="or desktop-only">Or</div>
+								<a href="#campus-links" class="single-course__btn desktop-only">Zoom <i class="fa-solid fa-angle-right"></i></a>
+							<?php } ?>
 							<?php if((!empty($price_links_data) && get_field('show_enrol_button') == 1) && get_field('upcoming_courses_button') == 1) { ?>
 								<div class="or desktop-only">Or</div>
 							<?php } ?>
 							<?php if(get_field('upcoming_courses_button') == 1 || get_field('course_type') == "in-person") { ?>
-								<a href="#upcoming" class="single-course__btn blue desktop-only">View Calendar <i class="fa-solid fa-angle-right"></i></a>
+								<a href="#campus-links" class="single-course__btn blue desktop-only">View Calendar <i class="fa-solid fa-angle-right"></i></a>
 							<?php } ?>
                         </div>
                         <!-- End of Calendar Button -->
+						<div class="single-course__calendar">
+							<?php if( is_single( ('certificate-ii-in-security-operations') ) ) { ?>
+								<a href="<?php echo get_permalink(246499); ?>" class="single-course__btn orange">Apply for Funding <i class="fa-solid fa-angle-right"></i></a>
+							<?php } ?>
+						</div>
 						
 						<!-- Course Image -->
 						<?php echo get_the_post_thumbnail( $post_id, array( 282, 259), array( 'class' => 'aligncenter course-image' ) ); ?>
@@ -192,10 +224,10 @@ Template Post Type: courses
 						<!-- Student Flyer -->
 						<div class="student-flyer">
 							<?php if( get_field('student_flyer') != '') { ?>
-								<a href="<?php the_field('student_flyer'); ?>" class="button1" target="_blank">Download Student Flyer</a>
+								<a href="<?php the_field('student_flyer'); ?>" class="button1 blue" target="_blank">Download Student Flyer</a>
 							<?php } ?>
-							<?php if( is_single( ('certificate-ii-in-security-operations') ) ) { ?>
-								<a href="<?php echo get_permalink(246499); ?>" class="single-course__btn dark-blue ">Apply for Funding</a>
+							<?php if($term_obj_list[0]->name == "Security Courses") { ?>
+								<a href="<?php bloginfo('url');?>/security-career-information-sessions/" class="button1 career-info">Career Info Sessions</a>
 							<?php } ?>
 						</div>
 						<!-- End Student Flyer -->
@@ -204,6 +236,84 @@ Template Post Type: courses
                 </div>
             </div><!-- .container -->
         </section><!-- #course-details -->
+		
+		<?php if(get_field('sandgate_workshops') != '' || get_field('logan_workshops') != '' || get_field('zoom_classes') != '' || get_field('albion_workshops') != '' || get_field('zoom_classes') != '' || get_field('rothwell_workshops') != '') { ?>
+			<section id="campus-links">
+				<div class="container">
+					<div class="row justify-content-md-center">
+						<div class="col-12 col-lg-8">
+							<h4>Upcoming Courses</h4>
+							<h2 style="text-align: center;"><?php the_title(); ?></h2>
+						</div>
+					</div>
+					<div class="row justify-content-md-center">
+						<div class="col-12 col-lg-12 grey-bg desktop-only">
+							<h3>Select Training Campus</h3>
+							
+							<?php if(get_field('albion_workshops') != '') { ?>
+								<div class="course-loc <?php if(get_field('zoom_classes') != '' && is_single('provide-first-aid-cpr')) echo "1_3"; ?>">
+									<a href="#upcoming" data-id="albion" class="single-course__btn workshop-link et_smooth_scroll_disabled">Albion QLD 4010</a>
+								</div>
+							<?php } ?>
+							
+							<?php /* if(get_field('sandgate_workshops') != '') { ?>
+								<div class="course-loc <?php if(get_field('zoom_classes') != '' && is_single('provide-first-aid-cpr')) echo "1_3"; ?>">
+									<a href="#upcoming" data-id="sandgate" class="single-course__btn workshop-link et_smooth_scroll_disabled">Sandgate QLD 4017</a>
+								</div>
+							<?php } */ ?>
+							
+							<?php if(get_field('logan_workshops') != '') { ?>
+								<div class="course-loc <?php if(get_field('zoom_classes') != '' && is_single('provide-first-aid-cpr')) echo "1_3"; ?>">
+									<a href="#upcoming" data-id="logan" class="single-course__btn workshop-link et_smooth_scroll_disabled">Logan QLD 4114</a>
+								</div>
+							<?php } ?>
+							
+							<?php if(get_field('ipswich_workshops') != '') { ?>
+								<div class="course-loc <?php if(get_field('zoom_classes') != '' && is_single('provide-first-aid-cpr')) echo "1_3"; ?>">
+									<a href="#upcoming" data-id="ipswich" class="single-course__btn workshop-link et_smooth_scroll_disabled">Ipswich QLD 4305</a>
+								</div>
+							<?php } ?>
+							
+							<?php if(get_field('rothwell_workshops') != '') { ?>
+								<div class="course-loc <?php if(get_field('zoom_classes') != '' && is_single('provide-first-aid-cpr')) echo "1_3"; ?>">
+									<a href="#upcoming" data-id="rothwell" class="single-course__btn workshop-link et_smooth_scroll_disabled">Rothwell QLD 4022</a>
+								</div>
+							<?php } ?>
+							
+							<?php if(get_field('zoom_classes') != '') { ?>
+								<div class="course-loc <?php if(get_field('zoom_classes') != '' && is_single('provide-first-aid-cpr')) echo "1_3"; ?>">
+									<a href="#upcoming" data-id="zoom" class="single-course__btn workshop-link et_smooth_scroll_disabled">Zoom Classes</a>
+								</div>
+							<?php } ?> 
+						</div>
+						<div class="col-12 col-lg-8 grey-bg mobile-only">
+							<h3>Select Training Campus</h3>
+							<select id="workshop-link">
+								<option value="all">All</option>
+								<?php if(get_field('albion_workshops') != '') { ?>
+									<option value="albion">Albion QLD 4010</option>
+								<?php } ?>
+								<?php if(get_field('ipswich_workshops') != '') { ?>
+									<option value="ipswich">Ipswich QLD 4305</option>
+								<?php } ?>
+								<?php if(get_field('logan_workshops') != '') { ?>
+									<option value="logan">Logan QLD 4129</option>
+								<?php } ?>
+								<?php /* if(get_field('sandgate_workshops') != '') { ?>
+									<option value="sandgate">Sandgate QLD 4017</option>
+								<?php } */ ?>
+								<?php if(get_field('rothwell_workshops') != '') { ?>
+									<option value="rothwell">Rothwell QLD 4022</option>
+								<?php } ?>
+								<?php if(get_field('zoom_classes') != '') { ?>
+									<option value="zoom">Zoom Classes</option>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } ?>
 		
 		<!-- Upcoming Courses -->
 		<?php if(get_field('show_upcoming_courses') == 1) { ?>
@@ -218,6 +328,90 @@ Template Post Type: courses
 		</section>
 		<?php } ?>
 		<!-- END - Upcoming Courses -->
+		
+		<!-- Albion Courses -->
+		<?php if(get_field('albion_workshops') != '') { ?>
+			<section id="albion" class="pad-80 courses-table" style="display: none;">
+				<div class="container w-80">
+					<div class="row">
+						<div class="col-12">
+							<?php the_field('albion_workshops'); ?>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } ?>
+		<!-- END - Albion Courses -->
+		
+		<!-- Ipswich Courses -->
+		<?php if(get_field('ipswich_workshops') != '') { ?>
+			<section id="ipswich" class="pad-80 courses-table" style="display: none;">
+				<div class="container w-80">
+					<div class="row">
+						<div class="col-12">
+							<?php the_field('ipswich_workshops'); ?>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } ?>
+		<!-- END - Ipswich Courses -->
+				
+		<!-- Logan Courses -->
+		<?php if(get_field('logan_workshops') != '') { ?>
+			<section id="logan" class="pad-80 courses-table" style="display: none;">
+				<div class="container w-80">			
+					<div class="row">
+						<div class="col-12">
+							<?php the_field('logan_workshops'); ?>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } ?>
+		<!-- END - Logan Courses -->
+		
+		<!-- Sandgate Courses -->
+		<?php if(get_field('sandgate_workshops') != '') { ?>
+			<section id="sandgate" class="pad-80 courses-table" style="display: none;">
+				<div class="container w-80">
+					<div class="row">
+						<div class="col-12">
+							<?php the_field('sandgate_workshops'); ?>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } ?>
+		<!-- END - Sandgate Courses -->
+		
+		<!-- Rothwell Courses -->
+		<?php if(get_field('rothwell_workshops') != '') { ?>
+			<section id="rothwell" class="pad-80 courses-table" style="display: none;">
+				<div class="container w-80">
+					<div class="row">
+						<div class="col-12">
+							<?php the_field('rothwell_workshops'); ?>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } ?>
+		<!-- END - Rothwell Courses -->
+		
+		<!-- Zoom Classes -->
+		<?php if(get_field('zoom_classes') != '') { ?>
+			<section id="zoom" class="pad-80 courses-table" style="display: none;">
+				<div class="container w-80">
+					<div class="row">
+						<div class="col-12">
+							<?php the_field('zoom_classes'); ?>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } ?>
+		<!-- END - Zoom Classes	-->
 		
 		<!--<button type="button" class="button1 launch-btn" data-toggle="modal" data-target="#enrolmentEnquiry">
 		  Enrolment Enquiry
@@ -437,7 +631,7 @@ Template Post Type: courses
 										<p class="post-meta">
 										<?php $term_obj_list = get_the_terms( get_the_ID(), 'category' ); 
 												$term_id = $term_obj_list[0]->term_id; ?>
-												<a href="<?php echo get_term_link($term_id); ?>" rel="tag"><?php echo $term_obj_list[0]->name; ?></a>
+												<?php echo $term_obj_list[0]->name; ?>
 										</p>
 										<div class="excerpt">
 										<?php if(has_excerpt(get_the_ID())) {
@@ -491,7 +685,48 @@ Template Post Type: courses
 				</button>
 			  </div>
 			  <div class="modal-body">
-				<?php echo do_shortcode('[forminator_form id="253047"]');?>
+				<div id="zf_div_yGADlv573bT9WZ6KPsoGk23RPsFzU4Px3z8i7ZUWBHY"></div><script type="text/javascript">(function() {
+						try{
+						var f = document.createElement("iframe");
+						f.src = 'https://forms.zohopublic.com.au/ansicgroup1/form/EnrolmentEnquiry/formperma/yGADlv573bT9WZ6KPsoGk23RPsFzU4Px3z8i7ZUWBHY?zf_rszfm=1';
+						f.style.border="none";
+						f.style.height="864px";
+						f.style.width="100%";
+						f.style.transition="all 0.5s ease";
+						f.setAttribute("aria-label", 'Enrolment\x20Enquiry');
+
+						var d = document.getElementById("zf_div_yGADlv573bT9WZ6KPsoGk23RPsFzU4Px3z8i7ZUWBHY");
+						d.appendChild(f);
+						window.addEventListener('message', function (){
+						var evntData = event.data;
+						if( evntData && evntData.constructor == String ){
+						var zf_ifrm_data = evntData.split("|");
+						if ( zf_ifrm_data.length == 2 || zf_ifrm_data.length == 3 ) {
+						var zf_perma = zf_ifrm_data[0];
+						var zf_ifrm_ht_nw = ( parseInt(zf_ifrm_data[1], 10) + 15 ) + "px";
+						var iframe = document.getElementById("zf_div_yGADlv573bT9WZ6KPsoGk23RPsFzU4Px3z8i7ZUWBHY").getElementsByTagName("iframe")[0];
+						if ( (iframe.src).indexOf('formperma') > 0 && (iframe.src).indexOf(zf_perma) > 0 ) {
+						var prevIframeHeight = iframe.style.height;
+						var zf_tout = false;
+						if( zf_ifrm_data.length == 3 ) {
+						iframe.scrollIntoView();
+						zf_tout = true;
+						}
+						if ( prevIframeHeight != zf_ifrm_ht_nw ) {
+						if( zf_tout ) {
+						setTimeout(function(){
+						iframe.style.height = zf_ifrm_ht_nw;
+						},500);
+						} else {
+						iframe.style.height = zf_ifrm_ht_nw;
+						}
+						}
+						}
+						}
+						}
+						}, false);
+						}catch(e){}
+						})();</script>
 			  </div>
 			</div>
 		  </div>

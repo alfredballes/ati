@@ -50,7 +50,7 @@ function my_custom_enqueue_scripts() {
 add_action('wp_enqueue_scripts', 'my_custom_enqueue_scripts', 100);
 
 function my_custom_scripts() {
-    wp_enqueue_script('my-custom-script', get_stylesheet_directory_uri() . '/js/scripts.js', array('jquery'), null, true);
+    wp_enqueue_script('my-custom-script', get_stylesheet_directory_uri() . '/js/scripts.js', array('jquery'), '1.9', true);
 }
 add_action('wp_enqueue_scripts', 'my_custom_scripts');
 
@@ -152,8 +152,12 @@ add_filter('pre_get_posts', 'control_search_results');
 function enqueue_select2_jquery() {
     wp_register_style( 'select2css', '//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css', false, '1.0', 'all' );
     wp_register_script( 'select2', '//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.js', array( 'jquery' ), '1.0', true );
+	 wp_register_script( 'popperjs', '//cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js', array( 'jquery' ), '1.0', true );
+	 wp_register_script( 'bootstrapjs', '//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', array( 'jquery' ), '1.0', true );
     wp_enqueue_style( 'select2css' );
     wp_enqueue_script( 'select2' );
+    wp_enqueue_script( 'popperjs' );
+    wp_enqueue_script( 'bootstrapjs' );
 }
 add_action( 'wp_enqueue_scripts', 'enqueue_select2_jquery', 100 ); 
 
@@ -214,3 +218,18 @@ function your_columns_head2($defaults) {
     return $new;  
 } 
 add_filter('manage_posts_columns', 'your_columns_head2');  
+
+add_action('admin_head', 'custom_admin_css'); // admin_head is a hook my_custom_fonts is a function we are adding it to the hook
+
+function custom_admin_css() {
+  echo '<style>
+	@media (max-width: 1399px) {
+		th#title {
+			width: 150px;
+		}
+		th#tags {
+			width: auto;
+		}
+	}
+  </style>';
+}

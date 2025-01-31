@@ -31,6 +31,7 @@
 				<h3>Explore Courses</h3>
 			</div>
 		</div>
+		<?php /*
 		<div class="row">
 			<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3">
 				<label for="delivery" class="label">Delivery Method</label>
@@ -70,7 +71,7 @@
 						<option value="price-desc">Price - High to Low</option>
 					</select>
 			</div>
-		</div>
+		</div> <?php */ ?>
 		
 		<!-- courses -->
 		<div class="row">

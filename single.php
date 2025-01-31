@@ -12,18 +12,27 @@
 
  <?php if (have_posts()) : ?>
     <?php while (have_posts()) : the_post();?>
-		<section id="course-details">
-            <div class="container w-80">
-                <div class="row">
-					<h1 class="course-title"><?php the_title(); ?></h1>
-				</div>
-			</div>
-		</section>
 		
 		<?php $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
 		if(!empty($post_thumbnail_id)) {
 			$img_ar =  wp_get_attachment_image_src( $post_thumbnail_id, 'full' ); ?>    
-			<section style="background-image: url(<?php echo $img_ar[0]; ?>)" class="featured-image-section"></section>
+			<section style="background-image: url(<?php echo $img_ar[0]; ?>)" class="featured-image-section">
+				<div class="container w-80">
+					<div class="row justify-content-md-center align-items-center">
+						<div class="col-12 col-lg-8 align-self-center">
+							<h1 class="align-middle course-title"><?php the_title(); ?></h1>
+						</div>
+					</div>
+				</div>
+			</section>
+		<?php } else { ?>
+			<section id="course-details">
+				<div class="container w-80">
+					<div class="row">
+						<h1 class="course-title"><?php the_title(); ?></h1>
+					</div>
+				</div>
+			</section>
 		<?php } ?>
 		
 		<section id="post-details">
@@ -269,7 +278,7 @@
 						<img decoding="async" width="81" height="76" alt="news-icon-blue" title="news-icon-blue" data-src="https://ansicvpn.com/wp-content/uploads/2024/05/news-icon-blue.svg" class="wp-image-249191 lazyloaded" src="https://ansicvpn.com/wp-content/uploads/2024/05/news-icon-blue.svg">
 						<h3>Discover the<br> Latest Trends</h3>
 						<p>Stay up to date with our<br> informative blog posts</p>
-						<a class="button1" href="https://ansicvpn.com/articles/" data-icon="5">View Latest News <i class="fa fa-angle-right"></i></a>
+						<a class="button1" href="<?php echo bloginfo('url'); ?>/articles/" data-icon="5">View Latest News <i class="fa fa-angle-right"></i></a>
 					</div>
 				</div>
 			</div>

@@ -113,12 +113,7 @@ get_header(); ?>
 										<h5 class="entry-title"><?php the_title(); ?></h5>
 										
 										<div class="excerpt">
-											<?php if(has_excerpt(get_the_ID())) {
-												the_excerpt(); 
-											} else {
-												echo strip_shortcodes(wp_trim_words(get_the_content(), 50, '...'));
-											}
-											?>
+											<?php echo strip_shortcodes(wp_trim_words(get_the_content(), 50, '...')); ?>
 										</div>
 										
 										<a class="button4" href="<?php the_permalink(); ?>">Read More</a>

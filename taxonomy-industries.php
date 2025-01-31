@@ -17,7 +17,7 @@
 					//print_r($industry);
 					$icon = get_field( 'course_icon_cat', get_queried_object()->taxonomy . '_'. get_queried_object()->term_id );
 				?>
-				<img src="<?php echo $icon; ?>"><h1><?php echo get_queried_object()->name; ?></h1>
+				<img src="<?php echo $icon; ?>" alt="<?php echo get_queried_object()->name; ?> icon"><h1><?php echo get_queried_object()->name; ?></h1>
 			</div>
 			<div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xxl-6 description">
 				<p><?php echo get_queried_object()->description; ?></p>
@@ -39,8 +39,8 @@
 				</form>
 			</div>
 		</div>
-		<div class="row">
-			<?php $args = array(
+		<!--<div class="row"> -->
+			<?php /* $args = array(
 						'numberposts' => -1,
 						'post_type' => 'courses',
 						'tax_query' => array(
@@ -55,8 +55,8 @@
 					$cat_posts  = get_posts($args);
 
 					$my_post_ids = wp_list_pluck ($cat_posts, 'ID');
-			?>
-			<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3"> 
+			 ?>
+			<!--<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3"> 
 				<label for="delivery" class="label">Delivery Method</label>
 				<?php $terms    = wp_get_object_terms ($my_post_ids, 'delivery'); ?>
 					
@@ -66,7 +66,7 @@
 						<option value="<?php echo $term->slug; ?>"><?php echo $term->name; ?></option>
 					<?php } ?>
 					</select>
-			</div>
+			</div>--><?php */ ?>
 			<!--<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3">
 				<label for="industries" class="label">Industries</label>
 				<?php /*$terms = get_terms([
@@ -81,7 +81,7 @@
 					<?php } */ ?>
 					</select>
 			</div>-->
-			<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3 sort-col">
+			<!--<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3 sort-col">
 				<label for="sort" class="label">Sort By</label>
 					<select name="sort" id="sort" style="width: 100%">
 						<option value="sort">Sort</option>
@@ -91,7 +91,7 @@
 						<option value="price-desc">Price - High to Low</option>
 					</select>
 			</div>
-		</div>
+		</div>-->
 		
 		<!-- courses -->
 		<div class="row">
@@ -141,7 +141,7 @@
                                 
 							<div class="cat-info">
 								<?php if($icon!="") { ?>
-									<img src="<?php echo $icon; ?>" width="25" height="25">
+									<img src="<?php echo $icon; ?>" alt="<?php echo get_queried_object()->name; ?> icon" width="25" height="25">
 								<?php } ?>
                                 <span class="industry-name"><?php echo $term_obj_list[0]->name; ?></span>
 							</div>
@@ -152,8 +152,13 @@
 								
 								<?php
 								$modes = "";
+								$current_count = 1;
 								foreach($study_mode as $mode){
-									$modes .= $mode->name . "<br>";
+									$modes .= $mode->name . " ";
+									if(count($study_mode)>1 && $current_count<count($study_mode)) {
+										$modes .= "Or <br>";
+									}
+									$current_count++;
 								}
 								?>
 								<div class="study modes">
@@ -164,6 +169,7 @@
 								<div class="modes">
 									<span class="info-label">Course Fee:</span>&nbsp;
 									<span class="info-value price">
+										<?php if($post->ID == 2389) { echo "From "; } ?>
 										<?php if(get_field('course_fee') != '') { 
 											echo "$" . get_field('course_fee'); 
 										} ?>
@@ -205,7 +211,7 @@
 		<div class="container w-80">
 			<div class="row">
 				<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 image-col">
-					<img src="<?php the_field('advantages_image', get_queried_object()->taxonomy . '_'. get_queried_object()->term_id); ?>" class="bordered more-image">
+					<img src="<?php the_field('advantages_image', get_queried_object()->taxonomy . '_'. get_queried_object()->term_id); ?>" class="bordered more-image" alt="<?php echo get_queried_object()->name; ?> Advantages image">
 					
 				</div>
 				<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -213,7 +219,7 @@
 					<div class="more-text-right">
 						<h3>Advantages and Skills You Gain</h3>
 						<?php the_field('advantages', get_queried_object()->taxonomy . '_'. get_queried_object()->term_id); ?>
-					</div>
+					</div>`
 					<?php if(get_field( 'what_to_expect', get_queried_object()->taxonomy . '_'. get_queried_object()->term_id ) != '') { ?>
 						<div class="more-text-right">
 							<h3>What to Expect</h3>
@@ -248,7 +254,7 @@
 					<?php } ?>
 				</div>
 				<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 more-info-right">
-					<img src="<?php the_field('why_image', get_queried_object()->taxonomy . '_'. get_queried_object()->term_id); ?>" class="bordered more-image">
+					<img src="<?php the_field('why_image', get_queried_object()->taxonomy . '_'. get_queried_object()->term_id); ?>" class="bordered more-image" alt="<?php echo get_queried_object()->name; ?> Why section image">
 				</div>
 			</div>
 			<div class="row justify-content-center testimonials-row">
@@ -268,7 +274,7 @@
 	<div class="container w-80">
 		<div class="row">
 			<div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<img src="<?php bloginfo( 'url' ); ?>/wp-content/uploads/2024/04/faqs.png" width="94" height="86">
+				<img src="<?php bloginfo( 'url' ); ?>/wp-content/uploads/2024/04/faqs.png" width="94" height="86" alt="<?php echo get_queried_object()->name; ?> FAQs icon">
 				<h3>Frequently Asked Questions</h3>
 			</div>
 			<div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 more-info-right">
@@ -342,7 +348,7 @@
 								<p class="post-meta">
 									<?php $term_obj_list = get_the_terms( get_the_ID(), 'category' ); 
 										$term_id = $term_obj_list[0]->term_id; ?>
-										<a href="<?php echo get_term_link($term_id); ?>" rel="tag"><?php echo $term_obj_list[0]->name; ?></a>
+										<?php echo $term_obj_list[0]->name; ?>
 								</p>
 								<div class="excerpt">
 									<?php if(has_excerpt(get_the_ID())) {
